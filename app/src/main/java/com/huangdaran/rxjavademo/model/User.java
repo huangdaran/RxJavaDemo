@@ -7,6 +7,7 @@ package com.huangdaran.rxjavademo.model;
 public class User {
     private String sex;
     private String name;
+    private String token_data;
     public User(){}
     public User(String name,String sex){
         this.name = name;
