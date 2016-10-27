@@ -68,25 +68,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 //        getApi();
-        getStringToken();
+//        getStringToken();
 //        getStringTokenModel();
+        getUserData();
     }
 
-    private void getUser(){
+    private void getUserData(){
         Log.i("onNext","code == 0000000");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.ttj2015.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-        GetApi api = retrofit.create(GetApi.class);
-        api.getUsers("111").doOnNext(new Action1<User>() {
+        final  GetApi api = retrofit.create(GetApi.class);
+        api.getTokenString("1345454","android").flatMap(new Func1<TokenModel, Observable<User>>() {
             @Override
-            public void call(User user) {
-
+            public Observable<User> call(TokenModel model) {
+                Log.i("onNext","User == "+model.token_data);
+                return api.getUsers("1027",model.token_data,"1.0.1");
             }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<User>() {
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Subscriber<User>() {
             @Override
             public void onCompleted() {
 
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(User user) {
-
+                Log.i("onNext","User == "+user.data.uname);
             }
         });
     }
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void getUserName(){
+   /* private void getUserName(){
         User u[] = new User[]{new User("小然","男"),new User("小名","男"),new User("小红","女")};
         Observable.from(u).flatMap(new Func1<User, Observable<String>>() {
             @Override
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("onNext",s);
             }
         });
-    }
+    }*/
 
     private void getApi(){
         Interceptor interceptor = new Interceptor() {
