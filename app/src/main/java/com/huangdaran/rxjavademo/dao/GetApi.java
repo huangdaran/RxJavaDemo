@@ -22,8 +22,8 @@ public interface GetApi {
 //    public Call<ResponseBody> callToken(@Query("uid") String id,@Query("api_version") String api);
     public Call<String> callToken(@Query("appid")String app_id,@Query("app_platform")String app_platform);
 
-    @GET("NewApi/Apptoken/index")
-    public Observable<User> getUsers(@Query("appid")String app_id);
+    @GET("NewApi/user/userxx")
+    public Observable<User> getUsers(@Query("id")String uid,@Query("ttj_token")String ttj_token,@Query("api_version")String api_version);
     @GET("NewApi/Apptoken/index")
     public Observable<String> getToken(@Query("appid")String app_id,@Query("app_platform")String app_platform);
 
